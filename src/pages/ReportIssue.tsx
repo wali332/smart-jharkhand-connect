@@ -23,27 +23,31 @@ const ReportIssue = () => {
   ];
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("handlePhotoUpload called");
     const file = event.target.files?.[0];
     if (file) {
       console.log("File selected:", file.name, file.type, file.size);
       
       // Validate file type
       if (!file.type.startsWith('image/')) {
+        console.log("Invalid file type:", file.type);
         toast.error("Please select a valid image file");
         return;
       }
       
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
+        console.log("File too large:", file.size);
         toast.error("File size must be less than 5MB");
         return;
       }
 
+      console.log("Starting file read...");
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
         if (result) {
-          console.log("Photo loaded successfully");
+          console.log("Photo loaded successfully, setting state...");
           setPhoto(result);
           
           // Simulate ML classification after a short delay
@@ -55,6 +59,7 @@ const ReportIssue = () => {
           }, 500);
           
           // Get current location
+          console.log("Getting geolocation...");
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
               (position) => {
@@ -72,6 +77,7 @@ const ReportIssue = () => {
               }
             );
           } else {
+            console.log("Geolocation not supported");
             setGeoLocation({ lat: 23.3441, lng: 85.3096 });
             toast.info("Geolocation not supported, using default location");
           }
@@ -171,12 +177,20 @@ const ReportIssue = () => {
                       Take a photo of the issue or upload from gallery
                     </p>
                     <div className="space-y-3">
-                      <label htmlFor="photo-upload" className="block">
-                        <Button type="button" className="cursor-pointer">
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload Photo
-                        </Button>
-                      </label>
+                      <Button 
+                        type="button"
+                        onClick={() => {
+                          console.log("Upload button clicked");
+                          const fileInput = document.getElementById('photo-upload') as HTMLInputElement;
+                          if (fileInput) {
+                            fileInput.click();
+                          }
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Photo
+                      </Button>
                       <p className="text-xs text-muted-foreground">
                         Supports: JPG, PNG, WebP (max 5MB)
                       </p>
@@ -209,12 +223,20 @@ const ReportIssue = () => {
                       >
                         Take Another Photo
                       </Button>
-                      <label htmlFor="photo-upload-replace" className="flex-1">
-                        <Button variant="outline" className="w-full cursor-pointer">
-                          <Upload className="w-4 h-4 mr-2" />
-                          Replace
-                        </Button>
-                      </label>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => {
+                          console.log("Replace button clicked");
+                          const fileInput = document.getElementById('photo-upload-replace') as HTMLInputElement;
+                          if (fileInput) {
+                            fileInput.click();
+                          }
+                        }}
+                        className="flex-1 cursor-pointer"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Replace
+                      </Button>
                       <input
                         id="photo-upload-replace"
                         type="file"
