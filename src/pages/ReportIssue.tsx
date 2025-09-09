@@ -25,40 +25,97 @@ const ReportIssue = () => {
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      console.log("File selected:", file.name, file.type, file.size);
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error("Please select a valid image file");
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size must be less than 5MB");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPhoto(e.target?.result as string);
-        // Simulate ML classification
-        const randomType = issueTypes[Math.floor(Math.random() * issueTypes.length)];
-        setClassification(randomType.id);
-        // Simulate getting current location
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              setGeoLocation({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              });
-            },
-            () => {
-              // Fallback to Jharkhand coordinates
-              setGeoLocation({ lat: 23.3441, lng: 85.3096 });
-            }
-          );
+        const result = e.target?.result as string;
+        if (result) {
+          console.log("Photo loaded successfully");
+          setPhoto(result);
+          
+          // Simulate ML classification after a short delay
+          setTimeout(() => {
+            const randomType = issueTypes[Math.floor(Math.random() * issueTypes.length)];
+            setClassification(randomType.id);
+            console.log("ML Classification:", randomType.label);
+            toast.success(`Issue classified as: ${randomType.label}`);
+          }, 500);
+          
+          // Get current location
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setGeoLocation({
+                  lat: Number(position.coords.latitude.toFixed(4)),
+                  lng: Number(position.coords.longitude.toFixed(4)),
+                });
+                console.log("Location updated:", position.coords.latitude, position.coords.longitude);
+              },
+              (error) => {
+                console.log("Geolocation error:", error.message);
+                // Fallback to Jharkhand coordinates
+                setGeoLocation({ lat: 23.3441, lng: 85.3096 });
+                toast.info("Using default location (enable GPS for accuracy)");
+              }
+            );
+          } else {
+            setGeoLocation({ lat: 23.3441, lng: 85.3096 });
+            toast.info("Geolocation not supported, using default location");
+          }
         }
       };
+      
+      reader.onerror = () => {
+        console.error("Error reading file");
+        toast.error("Error reading the selected image");
+      };
+      
       reader.readAsDataURL(file);
+    } else {
+      console.log("No file selected");
     }
+    
+    // Reset the input value to allow selecting the same file again
+    event.target.value = '';
   };
 
   const handleSubmit = () => {
+    console.log("Submit button clicked");
     if (!photo) {
       toast.error("Please upload a photo first");
       return;
     }
+    if (!classification) {
+      toast.error("Please wait for AI classification to complete");
+      return;
+    }
+    
+    console.log("Submitting complaint with data:", {
+      photo: photo ? "Present" : "Missing",
+      classification,
+      geoLocation,
+      note
+    });
+    
     setIsSubmitted(true);
     toast.success("Complaint submitted successfully!");
-    setTimeout(() => navigate("/"), 2000);
+    setTimeout(() => {
+      console.log("Navigating to home");
+      navigate("/");
+    }, 2000);
   };
 
   if (isSubmitted) {
@@ -70,9 +127,18 @@ const ReportIssue = () => {
           <p className="text-muted-foreground mb-4">
             Your complaint has been registered and assigned ID: #GRV-{Math.floor(Math.random() * 10000)}
           </p>
-          <Button onClick={() => navigate("/")} className="w-full">
-            Back to Home
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/")} className="flex-1">
+              Back to Home
+            </Button>
+            <Button 
+              onClick={() => navigate("/report")} 
+              variant="outline"
+              className="flex-1"
+            >
+              Report Another
+            </Button>
+          </div>
         </Card>
       </div>
     );
@@ -99,21 +165,26 @@ const ReportIssue = () => {
               <div>
                 <h3 className="font-semibold text-foreground mb-4">1. Take or Upload Photo</h3>
                 {!photo ? (
-                  <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
+                  <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
                     <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground mb-4">
                       Take a photo of the issue or upload from gallery
                     </p>
-                    <label htmlFor="photo-upload">
-                      <Button className="cursor-pointer">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload Photo
-                      </Button>
-                    </label>
+                    <div className="space-y-3">
+                      <label htmlFor="photo-upload" className="block">
+                        <Button type="button" className="cursor-pointer">
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload Photo
+                        </Button>
+                      </label>
+                      <p className="text-xs text-muted-foreground">
+                        Supports: JPG, PNG, WebP (max 5MB)
+                      </p>
+                    </div>
                     <input
                       id="photo-upload"
                       type="file"
-                      accept="image/*"
+                      accept="image/*,.jpg,.jpeg,.png,.webp"
                       capture="environment"
                       className="hidden"
                       onChange={handlePhotoUpload}
@@ -126,13 +197,33 @@ const ReportIssue = () => {
                       alt="Uploaded issue"
                       className="w-full h-64 object-cover rounded-lg"
                     />
-                    <Button
-                      variant="outline"
-                      onClick={() => setPhoto(null)}
-                      className="w-full"
-                    >
-                      Take Another Photo
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setPhoto(null);
+                          setClassification("");
+                          setGeoLocation({ lat: 23.3441, lng: 85.3096 });
+                        }}
+                        className="flex-1"
+                      >
+                        Take Another Photo
+                      </Button>
+                      <label htmlFor="photo-upload-replace" className="flex-1">
+                        <Button variant="outline" className="w-full cursor-pointer">
+                          <Upload className="w-4 h-4 mr-2" />
+                          Replace
+                        </Button>
+                      </label>
+                      <input
+                        id="photo-upload-replace"
+                        type="file"
+                        accept="image/*,.jpg,.jpeg,.png,.webp"
+                        capture="environment"
+                        className="hidden"
+                        onChange={handlePhotoUpload}
+                      />
+                    </div>
                   </div>
                 )}
               </div>

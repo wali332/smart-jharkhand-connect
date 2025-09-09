@@ -21,7 +21,13 @@ const Home = () => {
                 <p className="text-sm text-muted-foreground">Jharkhand</p>
               </div>
             </div>
-            <Button variant="outline" onClick={() => navigate("/admin")}>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                console.log("Navigating to admin dashboard");
+                navigate("/admin");
+              }}
+            >
               Admin Login
             </Button>
           </div>
@@ -39,11 +45,14 @@ const Home = () => {
               Report civic issues instantly with AI-powered classification and real-time tracking
             </p>
             
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6 bg-primary hover:bg-primary/90"
-              onClick={() => navigate("/report")}
-            >
+              <Button 
+                onClick={() => {
+                  console.log("Navigating to report page");
+                  navigate("/report");
+                }}
+                size="lg" 
+                className="text-lg px-8 py-6 bg-primary hover:bg-primary/90"
+              >
               <FileText className="w-5 h-5 mr-2" />
               Report Issue
             </Button>
