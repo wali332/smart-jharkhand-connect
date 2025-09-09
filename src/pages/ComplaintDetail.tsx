@@ -1,0 +1,289 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, MapPin, Calendar, Upload, CheckCircle, Clock, User, Camera } from "lucide-react";
+import { toast } from "sonner";
+
+const ComplaintDetail = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [citizenNote, setCitizenNote] = useState("");
+  const [isResolved, setIsResolved] = useState(false);
+
+  // Mock complaint data
+  const complaint = {
+    id: id || "GRV-1001",
+    type: "pothole",
+    status: "in_progress",
+    location: "Main Road, Ranchi",
+    coords: [23.3441, 85.3096],
+    reportedAt: "2024-01-15 10:30 AM",
+    description: "Large pothole causing traffic issues",
+    photo: "/placeholder.svg",
+    mlClassification: "pothole",
+    mlConfidence: 94,
+    citizen: {
+      name: "Anonymous",
+      phone: "+91-XXXX-XX-8765"
+    },
+    assignedAgent: {
+      name: "Rajesh Kumar",
+      id: "AGT-001",
+      assignedAt: "2024-01-15 11:15 AM"
+    },
+    statusHistory: [
+      {
+        status: "reported",
+        timestamp: "2024-01-15 10:30 AM",
+        by: "Citizen",
+        note: "Complaint submitted via mobile app"
+      },
+      {
+        status: "verified",
+        timestamp: "2024-01-15 10:32 AM",
+        by: "AI System",
+        note: "ML Classification: Pothole (94% confidence)"
+      },
+      {
+        status: "assigned",
+        timestamp: "2024-01-15 11:15 AM",
+        by: "Admin",
+        note: "Assigned to Rajesh Kumar (AGT-001)"
+      },
+      {
+        status: "in_progress",
+        timestamp: "2024-01-15 02:30 PM",
+        by: "Field Agent",
+        note: "Work started. Materials arranged."
+      }
+    ],
+    agentProof: null
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "reported": return "bg-muted";
+      case "verified": return "bg-info";
+      case "assigned": return "bg-warning";
+      case "in_progress": return "bg-info";
+      case "resolved": return "bg-success";
+      default: return "bg-muted";
+    }
+  };
+
+  const handleCitizenConfirm = () => {
+    if (!citizenNote.trim()) {
+      toast.error("Please add a confirmation note");
+      return;
+    }
+    setIsResolved(true);
+    toast.success("Thank you! Complaint marked as resolved.");
+  };
+
+  const handleAgentProofUpload = () => {
+    toast.success("Agent proof uploaded successfully");
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/admin")}>
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">Complaint Details</h1>
+              <p className="text-sm text-muted-foreground">{complaint.id}</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-6">
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Complaint Overview */}
+            <Card className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Badge variant="outline" className="font-mono">{complaint.id}</Badge>
+                    <Badge className="bg-info/10 text-info">
+                      {complaint.type.charAt(0).toUpperCase() + complaint.type.slice(1)}
+                    </Badge>
+                    <Badge className={getStatusColor(complaint.status)}>
+                      {complaint.status.replace("_", " ").toUpperCase()}
+                    </Badge>
+                  </div>
+                  <p className="text-muted-foreground flex items-center mb-1">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {complaint.location}
+                  </p>
+                  <p className="text-muted-foreground flex items-center">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    Reported: {complaint.reportedAt}
+                  </p>
+                </div>
+              </div>
+
+              {/* Photo */}
+              <div className="mb-4">
+                <h3 className="font-semibold mb-2">Issue Photo</h3>
+                <img
+                  src="/placeholder.svg"
+                  alt="Complaint photo"
+                  className="w-full h-64 object-cover rounded-lg bg-muted"
+                />
+              </div>
+
+              {/* ML Classification */}
+              <div className="mb-4">
+                <h3 className="font-semibold mb-2">AI Classification</h3>
+                <div className="bg-muted rounded-lg p-4">
+                  <div className="flex items-center space-x-2">
+                    <Badge variant="secondary" className="bg-info text-info-foreground">
+                      ML-Verified
+                    </Badge>
+                    <span>Classified as: <strong>{complaint.mlClassification}</strong></span>
+                    <Badge variant="outline">{complaint.mlConfidence}% confidence</Badge>
+                  </div>
+                </div>
+              </div>
+
+              {/* Geo-tag */}
+              <div className="mb-4">
+                <h3 className="font-semibold mb-2">Geo-location</h3>
+                <div className="bg-muted rounded-lg p-4">
+                  <p className="text-muted-foreground">
+                    <strong>Geo:</strong> {complaint.coords[0]}, {complaint.coords[1]}
+                  </p>
+                </div>
+              </div>
+
+              {/* Field Agent Section */}
+              {complaint.assignedAgent && (
+                <div className="mb-4">
+                  <h3 className="font-semibold mb-2">Assigned Field Agent</h3>
+                  <div className="bg-muted rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p><strong>{complaint.assignedAgent.name}</strong></p>
+                        <p className="text-muted-foreground text-sm">ID: {complaint.assignedAgent.id}</p>
+                        <p className="text-muted-foreground text-sm">Assigned: {complaint.assignedAgent.assignedAt}</p>
+                      </div>
+                      <Button onClick={handleAgentProofUpload} variant="outline" size="sm">
+                        <Camera className="w-4 h-4 mr-1" />
+                        Upload Proof
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Citizen Confirmation */}
+              {complaint.status === "in_progress" && !isResolved && (
+                <div className="border-2 border-primary/20 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2 text-primary">Citizen Confirmation Required</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Once the work is completed, please confirm if the issue has been resolved.
+                  </p>
+                  <Textarea
+                    placeholder="Add your confirmation note..."
+                    value={citizenNote}
+                    onChange={(e) => setCitizenNote(e.target.value)}
+                    className="mb-4"
+                  />
+                  <Button
+                    onClick={handleCitizenConfirm}
+                    className="bg-success hover:bg-success/90"
+                  >
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Mark as Resolved
+                  </Button>
+                </div>
+              )}
+
+              {isResolved && (
+                <div className="bg-success/10 border border-success/20 rounded-lg p-4">
+                  <div className="flex items-center space-x-2 text-success">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="font-semibold">Complaint Resolved</span>
+                  </div>
+                  <p className="text-muted-foreground mt-2">
+                    Thank you for confirming the resolution!
+                  </p>
+                </div>
+              )}
+            </Card>
+          </div>
+
+          {/* Status History */}
+          <div>
+            <Card className="p-4">
+              <h3 className="font-semibold text-foreground mb-4">Status History</h3>
+              <div className="space-y-4">
+                {complaint.statusHistory.map((entry, index) => (
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className={`w-3 h-3 rounded-full mt-1 ${getStatusColor(entry.status).replace('bg-', 'bg-')}`}></div>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Badge variant="outline" className="text-xs">
+                          {entry.status.replace("_", " ").toUpperCase()}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">{entry.timestamp}</span>
+                      </div>
+                      <p className="text-sm font-medium">{entry.by}</p>
+                      <p className="text-xs text-muted-foreground">{entry.note}</p>
+                    </div>
+                  </div>
+                ))}
+                {isResolved && (
+                  <div className="flex items-start space-x-3">
+                    <div className="w-3 h-3 bg-success rounded-full mt-1"></div>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Badge variant="outline" className="text-xs">RESOLVED</Badge>
+                        <span className="text-xs text-muted-foreground">Just now</span>
+                      </div>
+                      <p className="text-sm font-medium">Citizen</p>
+                      <p className="text-xs text-muted-foreground">Confirmed resolution: {citizenNote}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            {/* Complaint Info */}
+            <Card className="p-4 mt-6">
+              <h3 className="font-semibold text-foreground mb-4">Complaint Info</h3>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-muted-foreground">Reported by</p>
+                  <p className="font-medium">{complaint.citizen.name}</p>
+                  <p className="text-xs text-muted-foreground">{complaint.citizen.phone}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Category</p>
+                  <p className="font-medium">{complaint.type.charAt(0).toUpperCase() + complaint.type.slice(1)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Current Status</p>
+                  <Badge className={getStatusColor(complaint.status)}>
+                    {complaint.status.replace("_", " ").toUpperCase()}
+                  </Badge>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default ComplaintDetail;

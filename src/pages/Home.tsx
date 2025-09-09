@@ -1,0 +1,90 @@
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { FileText, Shield, MapPin } from "lucide-react";
+
+const Home = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                <Shield className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">GrievanceX</h1>
+                <p className="text-sm text-muted-foreground">Jharkhand</p>
+              </div>
+            </div>
+            <Button variant="outline" onClick={() => navigate("/admin")}>
+              Admin Login
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
+              Smart Grievance Redressal Platform
+            </h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Report civic issues instantly with AI-powered classification and real-time tracking
+            </p>
+            
+            <Button 
+              size="lg" 
+              className="text-lg px-8 py-6 bg-primary hover:bg-primary/90"
+              onClick={() => navigate("/report")}
+            >
+              <FileText className="w-5 h-5 mr-2" />
+              Report Issue
+            </Button>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-3 gap-6 mt-16">
+            <Card className="p-6 text-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Easy Reporting</h3>
+              <p className="text-sm text-muted-foreground">
+                Just take a photo. Our AI automatically classifies and geo-tags your complaint
+              </p>
+            </Card>
+
+            <Card className="p-6 text-center">
+              <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-6 h-6 text-secondary" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Real-time Tracking</h3>
+              <p className="text-sm text-muted-foreground">
+                Track your complaint status and get updates throughout the resolution process
+              </p>
+            </Card>
+
+            <Card className="p-6 text-center">
+              <div className="w-12 h-12 bg-info/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-6 h-6 text-info" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-2">Transparent Process</h3>
+              <p className="text-sm text-muted-foreground">
+                Complete visibility with ML verification and citizen confirmation system
+              </p>
+            </Card>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Home;
