@@ -23,12 +23,9 @@ const Home = () => {
             </div>
             <Button 
               variant="outline" 
-              onClick={() => {
-                console.log("Navigating to admin dashboard");
-                navigate("/admin");
-              }}
+              onClick={() => navigate("/login")}
             >
-              Admin Login
+              Login
             </Button>
           </div>
         </div>
@@ -46,15 +43,12 @@ const Home = () => {
             </p>
             
               <Button 
-                onClick={() => {
-                  console.log("Navigating to report page");
-                  navigate("/report");
-                }}
+                onClick={() => navigate("/login")}
                 size="lg" 
                 className="text-lg px-8 py-6 bg-primary hover:bg-primary/90"
               >
               <FileText className="w-5 h-5 mr-2" />
-              Report Issue
+              Get Started
             </Button>
           </div>
 
