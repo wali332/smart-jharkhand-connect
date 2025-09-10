@@ -9,33 +9,34 @@ const Analytics = () => {
   const navigate = useNavigate();
 
   const complaintsData = [
-    { name: "Jan", value: 45 },
-    { name: "Feb", value: 52 },
-    { name: "Mar", value: 38 },
-    { name: "Apr", value: 61 },
-    { name: "May", value: 43 },
-    { name: "Jun", value: 39 }
+    { name: "Jul", value: 78 },
+    { name: "Aug", value: 92 },
+    { name: "Sep", value: 87 },
+    { name: "Oct", value: 94 },
+    { name: "Nov", value: 102 },
+    { name: "Dec", value: 89 }
   ];
 
   const categoryData = [
-    { name: "Pothole", value: 35, color: "#f59e0b" },
-    { name: "Garbage", value: 25, color: "#dc2626" },
-    { name: "Street Light", value: 20, color: "#2563eb" },
-    { name: "Water Logging", value: 20, color: "#10b981" }
+    { name: "Pothole", value: 145, color: "#f59e0b" },
+    { name: "Garbage", value: 89, color: "#dc2626" },
+    { name: "Street Light", value: 67, color: "#2563eb" },
+    { name: "Water Logging", value: 34, color: "#10b981" }
   ];
 
   const departmentPerformance = [
-    { name: "Public Works", resolved: 87, total: 100, avgTime: "3.2 days" },
-    { name: "Sanitation", resolved: 92, total: 98, avgTime: "1.8 days" },
-    { name: "Electricity", resolved: 78, total: 89, avgTime: "4.1 days" },
-    { name: "Water Board", resolved: 85, total: 95, avgTime: "2.9 days" }
+    { name: "Road Maintenance", resolved: 123, total: 145, avgTime: "3.2 days" },
+    { name: "Sanitation Services", resolved: 81, total: 89, avgTime: "1.8 days" },
+    { name: "Electrical Department", resolved: 55, total: 67, avgTime: "2.4 days" },
+    { name: "Water & Sewerage", resolved: 26, total: 34, avgTime: "4.1 days" }
   ];
 
   const hotspots = [
     { area: "Main Road, Ranchi", complaints: 23, type: "Multiple" },
     { area: "Station Road, Dhanbad", complaints: 18, type: "Pothole" },
     { area: "Park Street, Jamshedpur", complaints: 15, type: "Garbage" },
-    { area: "Civil Lines, Bokaro", complaints: 12, type: "Street Light" }
+    { area: "Civil Lines, Bokaro", complaints: 12, type: "Street Light" },
+    { area: "Kanke Road, Ranchi", complaints: 11, type: "Waterlogging" }
   ];
 
   return (
@@ -61,7 +62,7 @@ const Analytics = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm">Total Complaints</p>
-                <p className="text-2xl font-bold text-foreground">278</p>
+                <p className="text-2xl font-bold text-foreground">335</p>
                 <div className="flex items-center mt-1">
                   <TrendingUp className="w-4 h-4 text-success mr-1" />
                   <span className="text-success text-sm">+12%</span>
@@ -77,7 +78,7 @@ const Analytics = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-muted-foreground text-sm">Resolved</p>
-                <p className="text-2xl font-bold text-foreground">234</p>
+                <p className="text-2xl font-bold text-foreground">285</p>
                 <div className="flex items-center mt-1">
                   <TrendingUp className="w-4 h-4 text-success mr-1" />
                   <span className="text-success text-sm">+8%</span>

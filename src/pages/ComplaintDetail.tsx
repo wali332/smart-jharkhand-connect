@@ -15,49 +15,49 @@ const ComplaintDetail = () => {
 
   // Mock complaint data
   const complaint = {
-    id: id || "GRV-1001",
-    type: "pothole",
+    id: id || "GRV-1002",
+    type: "garbage",
     status: "in_progress",
-    location: "Main Road, Ranchi",
-    coords: [23.3441, 85.3096],
-    reportedAt: "2024-01-15 10:30 AM",
-    description: "Large pothole causing traffic issues",
+    location: "Kanke Road, Ranchi",
+    coords: [23.3629, 85.3346],
+    reportedAt: "2024-01-09 02:22 PM",
+    description: "Overflowing garbage bins near bus stop causing health hazard. Multiple bins are full and waste is scattered on the road.",
     photo: "/placeholder.svg",
-    mlClassification: "pothole",
-    mlConfidence: 94,
+    mlClassification: "garbage",
+    mlConfidence: 92,
     citizen: {
-      name: "Anonymous",
-      phone: "+91-XXXX-XX-8765"
+      name: "Priya Singh",
+      phone: "+91-87654-32109"
     },
     assignedAgent: {
-      name: "Rajesh Kumar",
-      id: "AGT-001",
-      assignedAt: "2024-01-15 11:15 AM"
+      name: "Sunita Mahto",
+      id: "AGT-003",
+      assignedAt: "2024-01-09 04:45 PM"
     },
     statusHistory: [
       {
         status: "reported",
-        timestamp: "2024-01-15 10:30 AM",
+        timestamp: "2024-01-09 02:22 PM",
         by: "Citizen",
-        note: "Complaint submitted via mobile app"
+        note: "Complaint registered via mobile app with photo evidence"
       },
       {
         status: "verified",
-        timestamp: "2024-01-15 10:32 AM",
+        timestamp: "2024-01-09 02:24 PM",
         by: "AI System",
-        note: "ML Classification: Pothole (94% confidence)"
+        note: "ML Classification: Garbage (92% confidence) - Medium priority"
       },
       {
         status: "assigned",
-        timestamp: "2024-01-15 11:15 AM",
-        by: "Admin",
-        note: "Assigned to Rajesh Kumar (AGT-001)"
+        timestamp: "2024-01-09 04:45 PM",
+        by: "Admin Officer",
+        note: "Assigned to Sunita Mahto (Sanitation Services)"
       },
       {
         status: "in_progress",
-        timestamp: "2024-01-15 02:30 PM",
+        timestamp: "2024-01-10 09:30 AM",
         by: "Field Agent",
-        note: "Work started. Materials arranged."
+        note: "Field agent dispatched for garbage collection. Expected completion: 24 hours"
       }
     ],
     agentProof: null

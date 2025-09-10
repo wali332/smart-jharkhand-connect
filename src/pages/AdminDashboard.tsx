@@ -50,6 +50,42 @@ const AdminDashboard = () => {
       coords: [23.6693, 86.1511],
       timestamp: "2 days ago",
       priority: "high"
+    },
+    {
+      id: "GRV-1005",
+      type: "pothole",
+      status: "assigned",
+      location: "Kanke Road, Ranchi",
+      coords: [23.3629, 85.3346],
+      timestamp: "6 hours ago",
+      priority: "medium"
+    },
+    {
+      id: "GRV-1006",
+      type: "garbage",
+      status: "in_progress",
+      location: "Sakchi Market, Jamshedpur",
+      coords: [22.7925, 86.1842],
+      timestamp: "8 hours ago",
+      priority: "medium"
+    },
+    {
+      id: "GRV-1007",
+      type: "streetlight",
+      status: "open",
+      location: "HEC Colony, Ranchi",
+      coords: [23.4041, 85.4399],
+      timestamp: "12 hours ago",
+      priority: "low"
+    },
+    {
+      id: "GRV-1008",
+      type: "waterlogging",
+      status: "assigned",
+      location: "Circular Road, Jamshedpur",
+      coords: [22.8046, 86.2029],
+      timestamp: "1 day ago",
+      priority: "high"
     }
   ];
 
