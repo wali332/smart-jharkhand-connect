@@ -5,11 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Search, UserCheck, Clock, AlertCircle, CheckCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Search, UserCheck, Clock, AlertCircle, CheckCircle, LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/components/AuthContext";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -113,6 +115,11 @@ const AdminDashboard = () => {
     toast.success(`Complaint ${complaintId} assigned to field agent`);
   };
 
+  const handleBackToHome = () => {
+    logout();
+    navigate("/");
+  };
+
   const filteredComplaints = complaints.filter(complaint => {
     const matchesCategory = selectedCategory === "all" || complaint.type === selectedCategory;
     const matchesStatus = selectedStatus === "all" || complaint.status === selectedStatus;
@@ -127,8 +134,9 @@ const AdminDashboard = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
-                <ArrowLeft className="w-4 h-4" />
+              <Button variant="ghost" size="sm" onClick={handleBackToHome}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Back to Home
               </Button>
               <div>
                 <h1 className="text-xl font-bold text-foreground">Admin Dashboard</h1>
