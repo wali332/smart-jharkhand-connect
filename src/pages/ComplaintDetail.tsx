@@ -6,9 +6,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, MapPin, Calendar, Upload, CheckCircle, Clock, User, Camera } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/components/AuthContext";
 
 const ComplaintDetail = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { id } = useParams();
   const [citizenNote, setCitizenNote] = useState("");
   const [isResolved, setIsResolved] = useState(false);
@@ -112,7 +114,7 @@ const ComplaintDetail = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/admin")}>
+            <Button variant="ghost" size="sm" onClick={() => navigate(user?.role === 'admin' ? '/admin' : '/dashboard')}>
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <div>
@@ -196,7 +198,7 @@ const ComplaintDetail = () => {
                         <p className="text-muted-foreground text-sm">ID: {complaint.assignedAgent.id}</p>
                         <p className="text-muted-foreground text-sm">Assigned: {complaint.assignedAgent.assignedAt}</p>
                       </div>
-                      {complaint.status === "in_progress" && !isResolved && (
+                      {complaint.status === "in_progress" && !isResolved && user?.role === 'admin' && (
                         <div className="flex flex-col space-y-2">
                           <Button 
                             onClick={() => document.getElementById('proof-upload')?.click()}
