@@ -12,6 +12,7 @@ const ComplaintDetail = () => {
   const { id } = useParams();
   const [citizenNote, setCitizenNote] = useState("");
   const [isResolved, setIsResolved] = useState(false);
+  const [adminProof, setAdminProof] = useState<string | null>(null);
 
   // Mock complaint data
   const complaint = {
@@ -83,8 +84,27 @@ const ComplaintDetail = () => {
     toast.success("Thank you! Complaint marked as resolved.");
   };
 
-  const handleAgentProofUpload = () => {
-    toast.success("Agent proof uploaded successfully");
+  const handleAgentProofUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.error("Please select a valid image file");
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        if (result) {
+          setAdminProof(result);
+          setIsResolved(true);
+          toast.success("Proof uploaded! Complaint marked as resolved.");
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+    // Reset input
+    event.target.value = '';
   };
 
   return (
@@ -176,38 +196,43 @@ const ComplaintDetail = () => {
                         <p className="text-muted-foreground text-sm">ID: {complaint.assignedAgent.id}</p>
                         <p className="text-muted-foreground text-sm">Assigned: {complaint.assignedAgent.assignedAt}</p>
                       </div>
-                      <Button onClick={handleAgentProofUpload} variant="outline" size="sm">
-                        <Camera className="w-4 h-4 mr-1" />
-                        Upload Proof
-                      </Button>
+                      {complaint.status === "in_progress" && !isResolved && (
+                        <div className="flex flex-col space-y-2">
+                          <Button 
+                            onClick={() => document.getElementById('proof-upload')?.click()}
+                            variant="outline" 
+                            size="sm"
+                          >
+                            <Camera className="w-4 h-4 mr-1" />
+                            Upload Proof
+                          </Button>
+                          <input
+                            id="proof-upload"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleAgentProofUpload}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Citizen Confirmation */}
-              {complaint.status === "in_progress" && !isResolved && (
-                <div className="border-2 border-primary/20 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-primary">Citizen Confirmation Required</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Once the work is completed, please confirm if the issue has been resolved.
-                  </p>
-                  <Textarea
-                    placeholder="Add your confirmation note..."
-                    value={citizenNote}
-                    onChange={(e) => setCitizenNote(e.target.value)}
-                    className="mb-4"
+              {/* Admin Proof Upload */}
+              {adminProof && (
+                <div className="mb-4">
+                  <h3 className="font-semibold mb-2">Resolution Proof</h3>
+                  <img
+                    src={adminProof}
+                    alt="Resolution proof"
+                    className="w-full h-64 object-cover rounded-lg"
                   />
-                  <Button
-                    onClick={handleCitizenConfirm}
-                    className="bg-success hover:bg-success/90"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Mark as Resolved
-                  </Button>
                 </div>
               )}
 
+              {/* Resolution Status */}
               {isResolved && (
                 <div className="bg-success/10 border border-success/20 rounded-lg p-4">
                   <div className="flex items-center space-x-2 text-success">
@@ -215,7 +240,7 @@ const ComplaintDetail = () => {
                     <span className="font-semibold">Complaint Resolved</span>
                   </div>
                   <p className="text-muted-foreground mt-2">
-                    Thank you for confirming the resolution!
+                    Admin has uploaded proof of resolution.
                   </p>
                 </div>
               )}
@@ -248,10 +273,10 @@ const ComplaintDetail = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
                         <Badge variant="outline" className="text-xs">RESOLVED</Badge>
-                        <span className="text-xs text-muted-foreground">Just now</span>
+                        <span className="text-xs text-muted-foregroup">Just now</span>
                       </div>
-                      <p className="text-sm font-medium">Citizen</p>
-                      <p className="text-xs text-muted-foreground">Confirmed resolution: {citizenNote}</p>
+                      <p className="text-sm font-medium">Admin</p>
+                      <p className="text-xs text-muted-foreground">Resolution proof uploaded by admin</p>
                     </div>
                   </div>
                 )}
