@@ -4,11 +4,13 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "react-router-dom";
-import { Camera, MapPin, Upload, ArrowLeft, CheckCircle } from "lucide-react";
+import { Camera, MapPin, Upload, ArrowLeft, CheckCircle, LogOut, History } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/components/AuthContext";
 
 const ReportIssue = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [photo, setPhoto] = useState<string | null>(null);
   const [geoLocation, setGeoLocation] = useState({ lat: 23.3441, lng: 85.3096 });
   const [classification, setClassification] = useState<string>("");
@@ -119,8 +121,8 @@ const ReportIssue = () => {
     setIsSubmitted(true);
     toast.success("Complaint submitted successfully!");
     setTimeout(() => {
-      console.log("Navigating to home");
-      navigate("/");
+      console.log("Navigating to report page");
+      navigate("/report");
     }, 2000);
   };
 
@@ -134,15 +136,15 @@ const ReportIssue = () => {
             Your complaint has been registered and assigned ID: #GRV-{Math.floor(Math.random() * 10000)}
           </p>
           <div className="flex gap-3">
-            <Button onClick={() => navigate("/")} className="flex-1">
-              Back to Home
+            <Button onClick={() => navigate("/report")} className="flex-1">
+              Report Another
             </Button>
             <Button 
-              onClick={() => navigate("/report")} 
+              onClick={() => navigate("/dashboard")} 
               variant="outline"
               className="flex-1"
             >
-              Report Another
+              View Status
             </Button>
           </div>
         </Card>
@@ -154,11 +156,18 @@ const ReportIssue = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
-              <ArrowLeft className="w-4 h-4" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => {logout(); navigate("/");}}>
+                <LogOut className="w-4 h-4 mr-1" />
+                Logout
+              </Button>
+              <h1 className="text-xl font-bold text-foreground">Report Issue</h1>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => navigate("/dashboard")}>
+              <History className="w-4 h-4 mr-1" />
+              Check Status
             </Button>
-            <h1 className="text-xl font-bold text-foreground">Report Issue</h1>
           </div>
         </div>
       </header>

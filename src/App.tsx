@@ -44,8 +44,8 @@ const AuthRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/login" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace /> : <Login />} />
-      <Route path="/" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace /> : <Home />} />
+      <Route path="/login" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/report'} replace /> : <Login />} />
+      <Route path="/" element={user ? <Navigate to={user.role === 'admin' ? '/admin' : '/report'} replace /> : <Home />} />
       <Route 
         path="/report" 
         element={
