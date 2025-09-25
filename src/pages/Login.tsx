@@ -113,12 +113,12 @@ const Login = () => {
           <h3 className="font-semibold text-foreground mb-3">Demo Credentials</h3>
           <div className="space-y-3">
             {demoCredentials.map((cred) => (
-              <div key={cred.role} className="space-y-1">
+              <div key={cred.role} className="space-y-2">
                 <p className="text-sm font-medium text-foreground">{cred.role}:</p>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div>
+                <div className="space-y-1 sm:grid sm:grid-cols-2 sm:gap-2 sm:space-y-0 text-xs">
+                  <div className="break-all">
                     <span className="text-muted-foreground">Email: </span>
-                    <span className="font-mono">{cred.email}</span>
+                    <span className="font-mono text-xs">{cred.email}</span>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Password: </span>
@@ -128,7 +128,7 @@ const Login = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full mt-1"
+                  className="w-full mt-2"
                   onClick={() => {
                     setEmail(cred.email);
                     setPassword(cred.password);

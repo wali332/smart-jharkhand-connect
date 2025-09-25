@@ -132,54 +132,54 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" onClick={handleBackToHome}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Back to Home
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Button variant="ghost" size="sm" onClick={handleBackToHome} className="px-2 sm:px-3">
+                <LogOut className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Back to Home</span>
               </Button>
               <div>
-                <h1 className="text-xl font-bold text-foreground">Admin Dashboard</h1>
-                <p className="text-sm text-muted-foreground">Grievance Management System</p>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">Admin Dashboard</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Grievance Management System</p>
               </div>
             </div>
-            <Button onClick={() => navigate("/analytics")} variant="outline">
-              View Analytics
+            <Button onClick={() => navigate("/analytics")} variant="outline" size="sm" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">View </span>Analytics
             </Button>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Map Section */}
           <div className="lg:col-span-2">
-            <Card className="h-96 mb-6">
+            <Card className="h-64 sm:h-80 lg:h-96 mb-6">
               <div className="p-4 border-b border-border">
-                <h3 className="font-semibold text-foreground">Live Complaints Map</h3>
+                <h3 className="font-semibold text-foreground text-sm sm:text-base">Live Complaints Map</h3>
               </div>
-              <div className="h-80 bg-muted/20 flex items-center justify-center relative">
+              <div className="h-52 sm:h-72 lg:h-80 bg-muted/20 flex items-center justify-center relative">
                 <div className="absolute inset-4 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <MapPin className="w-12 h-12 text-primary mx-auto mb-2" />
-                    <p className="text-muted-foreground">Interactive Map View</p>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <MapPin className="w-8 h-8 sm:w-12 sm:h-12 text-primary mx-auto mb-2" />
+                    <p className="text-muted-foreground text-sm sm:text-base">Interactive Map View</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                       {filteredComplaints.length} active complaints
                     </p>
                   </div>
                 </div>
                 {/* Simulated map pins */}
-                <div className="absolute top-20 left-32 w-4 h-4 bg-destructive rounded-full animate-pulse"></div>
-                <div className="absolute top-40 right-40 w-4 h-4 bg-warning rounded-full animate-pulse"></div>
-                <div className="absolute bottom-32 left-40 w-4 h-4 bg-info rounded-full animate-pulse"></div>
-                <div className="absolute bottom-20 right-32 w-4 h-4 bg-success rounded-full animate-pulse"></div>
+                <div className="absolute top-20 left-32 w-3 h-3 sm:w-4 sm:h-4 bg-destructive rounded-full animate-pulse"></div>
+                <div className="absolute top-40 right-40 w-3 h-3 sm:w-4 sm:h-4 bg-warning rounded-full animate-pulse"></div>
+                <div className="absolute bottom-32 left-40 w-3 h-3 sm:w-4 sm:h-4 bg-info rounded-full animate-pulse"></div>
+                <div className="absolute bottom-20 right-32 w-3 h-3 sm:w-4 sm:h-4 bg-success rounded-full animate-pulse"></div>
               </div>
             </Card>
 
             {/* Filters */}
             <Card className="p-4 mb-6">
-              <div className="flex flex-wrap gap-4">
-                <div className="flex-1 min-w-[200px]">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
                   <Input
                     placeholder="Search complaints..."
                     value={searchTerm}
@@ -187,30 +187,32 @@ const AdminDashboard = () => {
                     className="w-full"
                   />
                 </div>
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="garbage">Garbage</SelectItem>
-                    <SelectItem value="pothole">Pothole</SelectItem>
-                    <SelectItem value="streetlight">Street Light</SelectItem>
-                    <SelectItem value="waterlogging">Water Logging</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                  <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="open">Open</SelectItem>
-                    <SelectItem value="assigned">Assigned</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
-                    <SelectItem value="resolved">Resolved</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-full sm:w-[140px]">
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      <SelectItem value="garbage">Garbage</SelectItem>
+                      <SelectItem value="pothole">Pothole</SelectItem>
+                      <SelectItem value="streetlight">Street Light</SelectItem>
+                      <SelectItem value="waterlogging">Water Logging</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                    <SelectTrigger className="w-full sm:w-[120px]">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="open">Open</SelectItem>
+                      <SelectItem value="assigned">Assigned</SelectItem>
+                      <SelectItem value="in_progress">In Progress</SelectItem>
+                      <SelectItem value="resolved">Resolved</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </Card>
 
@@ -218,35 +220,34 @@ const AdminDashboard = () => {
             <div className="space-y-4">
               {filteredComplaints.map((complaint) => (
                 <Card key={complaint.id} className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <div className="flex items-center space-x-2 mb-1">
-                          <Badge variant="outline" className="font-mono">
-                            {complaint.id}
-                          </Badge>
-                          <Badge className={getTypeColor(complaint.type)}>
-                            {complaint.type.charAt(0).toUpperCase() + complaint.type.slice(1)}
-                          </Badge>
-                          <Badge className={getStatusColor(complaint.status)}>
-                            {complaint.status.replace("_", " ").toUpperCase()}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground flex items-center">
-                          <MapPin className="w-4 h-4 mr-1" />
-                          {complaint.location}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          <Clock className="w-3 h-3 inline mr-1" />
-                          {complaint.timestamp}
-                        </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1 space-y-2">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {complaint.id}
+                        </Badge>
+                        <Badge className={`${getTypeColor(complaint.type)} text-xs`}>
+                          {complaint.type.charAt(0).toUpperCase() + complaint.type.slice(1)}
+                        </Badge>
+                        <Badge className={`${getStatusColor(complaint.status)} text-xs`}>
+                          {complaint.status.replace("_", " ").toUpperCase()}
+                        </Badge>
                       </div>
+                      <p className="text-sm text-muted-foreground flex items-center flex-wrap">
+                        <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+                        <span className="break-all">{complaint.location}</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground flex items-center">
+                        <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
+                        {complaint.timestamp}
+                      </p>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:items-start">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => navigate(`/complaint/${complaint.id}`)}
+                        className="text-xs sm:text-sm"
                       >
                         View Details
                       </Button>
@@ -254,9 +255,9 @@ const AdminDashboard = () => {
                         <Button
                           size="sm"
                           onClick={() => handleAssign(complaint.id)}
-                          className="bg-primary hover:bg-primary/90"
+                          className="bg-primary hover:bg-primary/90 text-xs sm:text-sm"
                         >
-                          <UserCheck className="w-4 h-4 mr-1" />
+                          <UserCheck className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                           Assign
                         </Button>
                       )}

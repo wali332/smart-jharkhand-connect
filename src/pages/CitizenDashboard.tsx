@@ -87,24 +87,24 @@ const CitizenDashboard = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="px-2 sm:px-3">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
               <div>
-                <h1 className="text-xl font-bold text-foreground">My Complaints</h1>
-                <p className="text-sm text-muted-foreground">Welcome back, {user?.name}</p>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">My Complaints</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Welcome back, {user?.name}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Button onClick={() => navigate("/report")} className="bg-primary hover:bg-primary/90">
-                <Plus className="w-4 h-4 mr-1" />
-                New Complaint
+            <div className="flex items-center gap-2">
+              <Button onClick={() => navigate("/report")} className="bg-primary hover:bg-primary/90 text-xs sm:text-sm px-2 sm:px-4" size="sm">
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                <span className="hidden sm:inline">New </span>Complaint
               </Button>
-              <Button variant="outline" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-1" />
-                Logout
+              <Button variant="outline" onClick={handleLogout} size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
+                <LogOut className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>
@@ -112,26 +112,26 @@ const CitizenDashboard = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="space-y-6">
           {/* Statistics Cards */}
-          <div className="lg:col-span-4 grid md:grid-cols-4 gap-4 mb-6">
-            <Card className="p-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <Card className="p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Complaints</p>
-                  <p className="text-2xl font-bold text-foreground">{userComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Total</p>
+                  <p className="text-lg sm:text-2xl font-bold text-foreground">{userComplaints.length}</p>
                 </div>
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-primary" />
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                  <User className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
                 </div>
               </div>
             </Card>
             
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Open</p>
-                  <p className="text-2xl font-bold text-destructive">
+                  <p className="text-xs sm:text-sm text-muted-foreground">Open</p>
+                  <p className="text-lg sm:text-2xl font-bold text-destructive">
                     {userComplaints.filter(c => c.status === "open").length}
                   </p>
                 </div>
@@ -139,11 +139,11 @@ const CitizenDashboard = () => {
               </div>
             </Card>
             
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">In Progress</p>
-                  <p className="text-2xl font-bold text-info">
+                  <p className="text-xs sm:text-sm text-muted-foreground">In Progress</p>
+                  <p className="text-lg sm:text-2xl font-bold text-info">
                     {userComplaints.filter(c => c.status === "in_progress" || c.status === "assigned").length}
                   </p>
                 </div>
@@ -151,11 +151,11 @@ const CitizenDashboard = () => {
               </div>
             </Card>
             
-            <Card className="p-4">
+            <Card className="p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Resolved</p>
-                  <p className="text-2xl font-bold text-success">
+                  <p className="text-xs sm:text-sm text-muted-foreground">Resolved</p>
+                  <p className="text-lg sm:text-2xl font-bold text-success">
                     {userComplaints.filter(c => c.status === "resolved").length}
                   </p>
                 </div>
@@ -165,11 +165,11 @@ const CitizenDashboard = () => {
           </div>
 
           {/* Search and Complaints List */}
-          <div className="lg:col-span-4">
+          <div>
             {/* Search */}
-            <Card className="p-4 mb-6">
+            <Card className="p-4 mb-4 sm:mb-6">
               <div className="flex items-center space-x-2">
-                <Search className="w-4 h-4 text-muted-foreground" />
+                <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                 <Input
                   placeholder="Search your complaints..."
                   value={searchTerm}
@@ -180,57 +180,58 @@ const CitizenDashboard = () => {
             </Card>
 
             {/* Complaints List */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {filteredComplaints.length === 0 ? (
-                <Card className="p-8 text-center">
-                  <p className="text-muted-foreground">No complaints found matching your search.</p>
+                <Card className="p-6 sm:p-8 text-center">
+                  <p className="text-muted-foreground text-sm sm:text-base">No complaints found matching your search.</p>
                 </Card>
               ) : (
                 filteredComplaints.map((complaint) => (
                   <Card key={complaint.id} className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-2">
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className="font-mono">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex-1 space-y-2">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <Badge variant="outline" className="font-mono text-xs">
                             {complaint.id}
                           </Badge>
-                          <Badge className={getTypeColor(complaint.type)}>
+                          <Badge className={`${getTypeColor(complaint.type)} text-xs`}>
                             {complaint.type.charAt(0).toUpperCase() + complaint.type.slice(1)}
                           </Badge>
-                          <Badge className={getStatusColor(complaint.status)}>
+                          <Badge className={`${getStatusColor(complaint.status)} text-xs`}>
                             {complaint.status.replace("_", " ").toUpperCase()}
                           </Badge>
                         </div>
                         
-                        <p className="font-medium text-foreground">{complaint.description}</p>
+                        <p className="font-medium text-foreground text-sm sm:text-base break-words">{complaint.description}</p>
                         
-                        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                           <span className="flex items-center">
-                            <MapPin className="w-3 h-3 mr-1" />
-                            {complaint.location}
+                            <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+                            <span className="break-all">{complaint.location}</span>
                           </span>
                           <span className="flex items-center">
-                            <Clock className="w-3 h-3 mr-1" />
+                            <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
                             {complaint.timestamp}
                           </span>
                         </div>
                         
                         {complaint.status === "resolved" ? (
-                          <p className="text-sm text-success">
+                          <p className="text-xs sm:text-sm text-success">
                             ✓ Resolved {complaint.resolutionDate}
                           </p>
                         ) : (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs sm:text-sm text-muted-foreground">
                             Expected resolution: {complaint.estimatedResolution}
                           </p>
                         )}
                       </div>
                       
-                      <div className="flex space-x-2">
+                      <div className="flex sm:flex-col">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => navigate(`/complaint/${complaint.id}`)}
+                          className="w-full sm:w-auto text-xs sm:text-sm"
                         >
                           View Details
                         </Button>
